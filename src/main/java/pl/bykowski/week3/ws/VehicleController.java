@@ -84,13 +84,8 @@ public class VehicleController implements VehicleApi {
 
     @Override
     public ResponseEntity<Void> deleteVehicle(long id) {
-        try {
-            vehicleService.deleteVehicle(id);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (IllegalStateException e) {
-            log.warn(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+        vehicleService.deleteVehicle(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

@@ -1,13 +1,27 @@
 package pl.bykowski.week3.entity;
 
-import lombok.Data;
+import lombok.*;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Data
+@Entity
 public class Vehicle {
 
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @NotEmpty
     private String brand;
+
+    @NotEmpty
     private String model;
+
+    @NotEmpty
     private String color;
+
 }

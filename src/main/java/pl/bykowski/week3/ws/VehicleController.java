@@ -1,6 +1,5 @@
 package pl.bykowski.week3.ws;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,7 +13,6 @@ import pl.bykowski.week3.service.VehicleService;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping(value = "/vehicles", produces = {
         MediaType.APPLICATION_JSON_VALUE,
@@ -36,13 +34,8 @@ public class VehicleController implements VehicleApi {
 
     @Override
     public ResponseEntity<Vehicle> getVehicle(long id) {
-        try {
-            Vehicle vehicle = vehicleService.find(id);
-            return ResponseEntity.ok(vehicle);
-        } catch (NotFoundException e) {
-            log.warn(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+        Vehicle vehicle = vehicleService.find(id);
+        return ResponseEntity.ok(vehicle);
     }
 
     @Override
@@ -52,34 +45,20 @@ public class VehicleController implements VehicleApi {
 
     @Override
     public ResponseEntity<Void> addVehicle(@Validated Vehicle vehicle) {
-        if(vehicleService.isCorrect(vehicle)) {
-            vehicleService.addVehicle(vehicle);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        }
-
-        return ResponseEntity.badRequest().build();
+        vehicleService.addVehicle(vehicle);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
     public ResponseEntity<Void> updateVehicle(@Validated Vehicle vehicle) {
-        try {
-            vehicleService.updateVehicle(vehicle);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (NotFoundException e) {
-            log.warn(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+        vehicleService.updateVehicle(vehicle);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override
     public ResponseEntity<Void> editVehicle(long id, Vehicle vehicle) {
-        try {
-            vehicleService.editVehicle(id, vehicle);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (NotFoundException e) {
-            log.warn(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+        vehicleService.editVehicle(id, vehicle);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override

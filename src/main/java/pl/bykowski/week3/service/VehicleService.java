@@ -9,7 +9,6 @@ import pl.bykowski.week3.entity.Vehicle;
 import pl.bykowski.week3.entity.builder.VehicleBuilder;
 import pl.bykowski.week3.exception.NotFoundException;
 import pl.bykowski.week3.repository.VehicleRepository;
-import pl.bykowski.week3.validator.VehicleValidator;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,12 +18,10 @@ import java.util.List;
 public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
-    private final VehicleValidator vehicleValidator;
 
     @Autowired
-    public VehicleService(VehicleRepository vehicleRepository, VehicleValidator vehicleValidator) {
+    public VehicleService(VehicleRepository vehicleRepository) {
         this.vehicleRepository = vehicleRepository;
-        this.vehicleValidator = vehicleValidator;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -38,7 +35,7 @@ public class VehicleService {
         return vehicleRepository.findAll();
     }
 
-    public Vehicle find(long id) throws NotFoundException {
+    public Vehicle find(long id) {
         return vehicleRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(String.format("There is no Vehicle with id: %s !!", id)));
     }
@@ -49,15 +46,11 @@ public class VehicleService {
         return vehicleRepository.findAllByColor(color);
     }
 
-    public boolean isCorrect(Vehicle vehicle) {
-        return vehicleValidator.valuesNotEmpty(vehicle);
-    }
-
     public void addVehicle(Vehicle vehicle) {
         vehicleRepository.save(vehicle);
     }
 
-    public void updateVehicle(Vehicle vehicle) throws NotFoundException {
+    public void updateVehicle(Vehicle vehicle) {
         Vehicle foundVehicle = find(vehicle.getId());
 
         foundVehicle.setBrand(vehicle.getBrand());
@@ -67,18 +60,18 @@ public class VehicleService {
         vehicleRepository.save(foundVehicle);
     }
 
-    public void editVehicle(long id, Vehicle vehicle) throws NotFoundException {
+    public void editVehicle(long id, Vehicle vehicle) {
         Vehicle foundVehicle = find(id);
         fillWithNotEmptyValues(vehicle, foundVehicle);
         vehicleRepository.save(foundVehicle);
     }
 
     private void fillWithNotEmptyValues(Vehicle sourceVehicle, Vehicle foundVehicle) {
-        if(vehicleValidator.valueNotEmpty(sourceVehicle.getBrand()))
+        if(StringUtils.isNotEmpty(sourceVehicle.getBrand()))
             foundVehicle.setBrand(sourceVehicle.getBrand());
-        if(vehicleValidator.valueNotEmpty(sourceVehicle.getBrand()))
+        if(StringUtils.isNotEmpty(sourceVehicle.getBrand()))
             foundVehicle.setModel(sourceVehicle.getModel());
-        if(vehicleValidator.valueNotEmpty(sourceVehicle.getColor()))
+        if(StringUtils.isNotEmpty(sourceVehicle.getColor()))
             foundVehicle.setColor(sourceVehicle.getColor());
     }
 

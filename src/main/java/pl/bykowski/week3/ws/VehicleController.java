@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.bykowski.week3.entity.Vehicle;
-import pl.bykowski.week3.exception.NotFoundException;
 import pl.bykowski.week3.service.VehicleService;
 
 import java.util.List;

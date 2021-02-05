@@ -35,9 +35,9 @@ public class VehicleService {
         return vehicleRepository.findAll();
     }
 
-    public Vehicle find(long id) {
-        return vehicleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException(String.format("There is no Vehicle with id: %s !!", id)));
+    public Vehicle find(Integer vehicleId) {
+        return vehicleRepository.findById(vehicleId)
+            .orElseThrow(() -> new NotFoundException(String.format("There is no Vehicle with id: %s !!", vehicleId)));
     }
 
     public List<Vehicle> findByColor(String color) {
@@ -60,8 +60,8 @@ public class VehicleService {
         vehicleRepository.save(foundVehicle);
     }
 
-    public void editVehicle(long id, Vehicle vehicle) {
-        Vehicle foundVehicle = find(id);
+    public void editVehicle(Integer vehicleId, Vehicle vehicle) {
+        Vehicle foundVehicle = find(vehicleId);
         fillWithNotEmptyValues(vehicle, foundVehicle);
         vehicleRepository.save(foundVehicle);
     }
@@ -75,8 +75,8 @@ public class VehicleService {
             foundVehicle.setColor(sourceVehicle.getColor());
     }
 
-    public void deleteVehicle(long id) {
-        vehicleRepository.deleteById(id);
+    public void deleteVehicle(Integer vehicleId) {
+        vehicleRepository.deleteById(vehicleId);
     }
 
 }

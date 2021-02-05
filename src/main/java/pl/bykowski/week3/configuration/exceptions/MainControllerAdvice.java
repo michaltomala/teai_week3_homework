@@ -11,6 +11,8 @@ import lombok.extern.log4j.Log4j2;
 @ControllerAdvice
 public class MainControllerAdvice {
 
+    private final String INTERNAL_ERROR_MESSAGE = "There is unexpected error during processing request";
+
     @ExceptionHandler(NotFoundException.class)
     private ResponseEntity<String> handleNotFoundException(NotFoundException exception) {
         log.warn(exception.getMessage());
@@ -20,7 +22,7 @@ public class MainControllerAdvice {
     @ExceptionHandler(Exception.class)
     private ResponseEntity<String> handleException(Exception exception) {
         log.error(exception.getMessage(), exception);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(INTERNAL_ERROR_MESSAGE);
     }
 
 }

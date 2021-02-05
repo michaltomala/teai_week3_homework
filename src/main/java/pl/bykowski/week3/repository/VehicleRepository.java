@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import pl.bykowski.week3.entity.Vehicle;
 import java.util.List;
 
-public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
+public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
 
     List<Vehicle> findAllByColor(String color);
 }

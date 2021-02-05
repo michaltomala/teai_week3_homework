@@ -32,8 +32,8 @@ public class VehicleController implements VehicleApi {
     }
 
     @Override
-    public ResponseEntity<Vehicle> getVehicle(long id) {
-        Vehicle vehicle = vehicleService.find(id);
+    public ResponseEntity<Vehicle> getVehicle(Integer vehicleId) {
+        Vehicle vehicle = vehicleService.find(vehicleId);
         return ResponseEntity.ok(vehicle);
     }
 
@@ -55,14 +55,14 @@ public class VehicleController implements VehicleApi {
     }
 
     @Override
-    public ResponseEntity<Void> editVehicle(long id, Vehicle vehicle) {
-        vehicleService.editVehicle(id, vehicle);
+    public ResponseEntity<Void> editVehicle(Integer vehicleId, Vehicle vehicle) {
+        vehicleService.editVehicle(vehicleId, vehicle);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override
-    public ResponseEntity<Void> deleteVehicle(long id) {
-        vehicleService.deleteVehicle(id);
+    public ResponseEntity<Void> deleteVehicle(Integer vehicleId) {
+        vehicleService.deleteVehicle(vehicleId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

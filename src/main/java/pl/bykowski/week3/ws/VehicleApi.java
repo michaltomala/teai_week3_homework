@@ -11,8 +11,8 @@ public interface VehicleApi {
     @GetMapping
     public ResponseEntity<List<Vehicle>> getVehicles();
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Vehicle> getVehicle(@PathVariable long id);
+    @GetMapping("/{vehicleId}")
+    public ResponseEntity<Vehicle> getVehicle(@PathVariable Integer vehicleId);
 
     @GetMapping("/color/{color}")
     public ResponseEntity<List<Vehicle>> getVehiclesByColor(@PathVariable String color);
@@ -23,10 +23,10 @@ public interface VehicleApi {
     @PutMapping
     public ResponseEntity<Void> updateVehicle(@RequestBody Vehicle vehicle);
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> editVehicle(@PathVariable long id, @RequestBody Vehicle vehicle);
+    @PatchMapping("/{vehicleId}")
+    public ResponseEntity<Void> editVehicle(@PathVariable Integer vehicleId, @RequestBody Vehicle vehicle);
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVehicle(@PathVariable long id);
+    @DeleteMapping("/{vehicleId}")
+    public ResponseEntity<Void> deleteVehicle(@PathVariable Integer vehicleId);
 
 }

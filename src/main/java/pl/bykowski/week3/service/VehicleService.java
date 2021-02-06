@@ -1,6 +1,5 @@
 package pl.bykowski.week3.service;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -9,6 +8,7 @@ import pl.bykowski.week3.entity.Vehicle;
 import pl.bykowski.week3.entity.builder.VehicleBuilder;
 import pl.bykowski.week3.exception.NotFoundException;
 import pl.bykowski.week3.repository.VehicleRepository;
+import pl.bykowski.week3.validator.VehicleValidator;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,10 +18,12 @@ import java.util.List;
 public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
+    private final VehicleValidator vehicleValidator;
 
     @Autowired
-    public VehicleService(VehicleRepository vehicleRepository) {
+    public VehicleService(VehicleRepository vehicleRepository, VehicleValidator vehicleValidator) {
         this.vehicleRepository = vehicleRepository;
+        this.vehicleValidator = vehicleValidator;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -41,7 +43,7 @@ public class VehicleService {
     }
 
     public List<Vehicle> findByColor(String color) {
-        if(StringUtils.isEmpty(color)) return Collections.emptyList();
+        if(!vehicleValidator.validateVehicleColor(color)) return Collections.emptyList();
 
         return vehicleRepository.findAllByColor(color);
     }
@@ -67,15 +69,16 @@ public class VehicleService {
     }
 
     private void fillWithNotEmptyValues(Vehicle sourceVehicle, Vehicle foundVehicle) {
-        if(StringUtils.isNotEmpty(sourceVehicle.getBrand()))
+        if(vehicleValidator.validateVehicleBrand(sourceVehicle))
             foundVehicle.setBrand(sourceVehicle.getBrand());
-        if(StringUtils.isNotEmpty(sourceVehicle.getBrand()))
+        if(vehicleValidator.validateVehicleModel(sourceVehicle))
             foundVehicle.setModel(sourceVehicle.getModel());
-        if(StringUtils.isNotEmpty(sourceVehicle.getColor()))
+        if(vehicleValidator.validateVehicleColor(sourceVehicle))
             foundVehicle.setColor(sourceVehicle.getColor());
     }
 
     public void deleteVehicle(Integer vehicleId) {
+        vehicleValidator.vehicleExists(vehicleId);
         vehicleRepository.deleteById(vehicleId);
     }
 

@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.bykowski.week3.dto.VehicleDTO;
 import pl.bykowski.week3.entity.Vehicle;
 import pl.bykowski.week3.service.VehicleService;
 
@@ -33,8 +33,7 @@ public class VehicleController implements VehicleApi {
 
     @Override
     public ResponseEntity<Vehicle> getVehicle(Integer vehicleId) {
-        Vehicle vehicle = vehicleService.find(vehicleId);
-        return ResponseEntity.ok(vehicle);
+        return ResponseEntity.ok(vehicleService.find(vehicleId));
     }
 
     @Override
@@ -43,27 +42,24 @@ public class VehicleController implements VehicleApi {
     }
 
     @Override
-    public ResponseEntity<Void> addVehicle(@Validated Vehicle vehicle) {
-        vehicleService.addVehicle(vehicle);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Vehicle> addVehicle(VehicleDTO vehicleDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(vehicleService.addVehicle(vehicleDTO));
     }
 
     @Override
-    public ResponseEntity<Void> updateVehicle(@Validated Vehicle vehicle) {
-        vehicleService.updateVehicle(vehicle);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<Vehicle> updateVehicle(Vehicle vehicle) {
+        return ResponseEntity.ok(vehicleService.updateVehicle(vehicle));
     }
 
     @Override
-    public ResponseEntity<Void> editVehicle(Integer vehicleId, Vehicle vehicle) {
-        vehicleService.editVehicle(vehicleId, vehicle);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<Vehicle> editVehicle(Integer vehicleId, VehicleDTO vehicleDTO) {
+        return ResponseEntity.ok(vehicleService.editVehicle(vehicleId, vehicleDTO));
     }
 
     @Override
     public ResponseEntity<Void> deleteVehicle(Integer vehicleId) {
         vehicleService.deleteVehicle(vehicleId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

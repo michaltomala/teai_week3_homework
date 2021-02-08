@@ -47,7 +47,7 @@ public class VehicleServiceImpl implements VehicleService {
     public List<Vehicle> findByColor(String color) {
         if(!Validator.validateString(color)) return Collections.emptyList();
 
-        return vehicleRepository.findAllByColor(color);
+        return vehicleRepository.findAllByColorContainingIgnoreCase(color);
     }
 
     public Vehicle addVehicle(VehicleDTO vehicleDTO) {

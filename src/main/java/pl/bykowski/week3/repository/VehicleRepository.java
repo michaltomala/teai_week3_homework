@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
 
-    List<Vehicle> findAllByColor(String color);
+    List<Vehicle> findAllByColorContainingIgnoreCase(String color);
 }
 

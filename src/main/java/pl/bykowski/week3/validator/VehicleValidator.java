@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import pl.bykowski.week3.exception.NotFoundException;
 import pl.bykowski.week3.repository.VehicleRepository;
 
-
 @Component
 public class VehicleValidator {
 

@@ -47,8 +47,8 @@ public class VehicleController implements VehicleApi {
     }
 
     @Override
-    public ResponseEntity<Vehicle> updateVehicle(Vehicle vehicle) {
-        return ResponseEntity.ok(vehicleService.updateVehicle(vehicle));
+    public ResponseEntity<Vehicle> updateVehicle(VehicleDTO vehicleDTO) {
+        return ResponseEntity.ok(vehicleService.updateVehicle(vehicleDTO));
     }
 
     @Override

@@ -15,7 +15,7 @@ public interface VehicleService {
 
     Vehicle addVehicle(VehicleDTO vehicleDTO);
 
-    Vehicle updateVehicle(Vehicle vehicle);
+    Vehicle updateVehicle(VehicleDTO vehicleDTO);
 
     Vehicle editVehicle(Integer vehicleId, VehicleDTO vehicleDTO);
 

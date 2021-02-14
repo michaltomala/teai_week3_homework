@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.bykowski.week3.dto.VehicleDTO;
 import pl.bykowski.week3.entity.Vehicle;
 
+import javax.validation.groups.Default;
 import java.util.List;
 
 public interface VehicleApi {
@@ -20,13 +21,13 @@ public interface VehicleApi {
     public ResponseEntity<List<Vehicle>> getVehiclesByColor(@PathVariable String color);
 
     @PostMapping
-    public ResponseEntity<Vehicle> addVehicle(@RequestBody @Validated VehicleDTO vehicleDTO);
+    public ResponseEntity<Vehicle> addVehicle(@RequestBody @Validated({Default.class, PostMapping.class}) VehicleDTO vehicleDTO);
 
     @PutMapping
-    public ResponseEntity<Vehicle> updateVehicle(@RequestBody Vehicle vehicle);
+    public ResponseEntity<Vehicle> updateVehicle(@RequestBody @Validated({Default.class, PutMapping.class}) VehicleDTO vehicleDTO);
 
     @PatchMapping("/{vehicleId}")
-    public ResponseEntity<Vehicle> editVehicle(@PathVariable Integer vehicleId, @RequestBody @Validated VehicleDTO vehicleDTO);
+    public ResponseEntity<Vehicle> editVehicle(@PathVariable Integer vehicleId, @RequestBody VehicleDTO vehicleDTO);
 
     @DeleteMapping("/{vehicleId}")
     public ResponseEntity<Void> deleteVehicle(@PathVariable Integer vehicleId);

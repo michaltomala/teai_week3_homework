@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import pl.bykowski.week3.dto.VehicleDTO;
 import pl.bykowski.week3.entity.Vehicle;
 import pl.bykowski.week3.entity.builder.VehicleBuilder;
+import pl.bykowski.week3.exception.EmptyJsonException;
 import pl.bykowski.week3.exception.NotFoundException;
 import pl.bykowski.week3.repository.VehicleRepository;
 import pl.bykowski.week3.validator.Validator;
@@ -47,7 +48,7 @@ public class VehicleServiceImpl implements VehicleService {
     public List<Vehicle> findByColor(String color) {
         if(!Validator.validateString(color)) return Collections.emptyList();
 
-        return vehicleRepository.findAllByColorContainingIgnoreCase(color);
+        return vehicleRepository.findAllByColorIgnoreCase(color);
     }
 
     public Vehicle addVehicle(VehicleDTO vehicleDTO) {
@@ -58,16 +59,16 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicle;
     }
 
-    public Vehicle updateVehicle(Vehicle vehicle) {
-        Vehicle foundVehicle = find(vehicle.getId());
+    public Vehicle updateVehicle(VehicleDTO vehicleDTO) {
+        Vehicle vehicle = find(vehicleDTO.getId());
 
-        foundVehicle.setBrand(vehicle.getBrand());
-        foundVehicle.setModel(vehicle.getModel());
-        foundVehicle.setColor(vehicle.getColor());
-        vehicleRepository.save(foundVehicle);
+        vehicle.setBrand(vehicleDTO.getBrand());
+        vehicle.setModel(vehicleDTO.getModel());
+        vehicle.setColor(vehicleDTO.getColor());
+        vehicleRepository.save(vehicle);
 
-        log.info("Vehicle updated: {}", foundVehicle);
-        return foundVehicle;
+        log.info("Vehicle updated: {}", vehicle);
+        return vehicle;
     }
 
     public Vehicle editVehicle(Integer vehicleId, VehicleDTO vehicleDTO) {
@@ -81,12 +82,40 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     private void fillWithNotEmptyValues(VehicleDTO vehicleDTO, Vehicle foundVehicle) {
-        if(Validator.validateString(vehicleDTO.getBrand()))
+        boolean updatePerformed = false;
+
+        updatePerformed = fillBrand(vehicleDTO, foundVehicle, updatePerformed);
+        updatePerformed = fillModel(vehicleDTO, foundVehicle, updatePerformed);
+        updatePerformed = fillColor(vehicleDTO, foundVehicle, updatePerformed);
+
+        if(!updatePerformed) throw new EmptyJsonException("There is no data to update!");
+    }
+
+    private boolean fillBrand(VehicleDTO vehicleDTO, Vehicle foundVehicle, boolean updatePerformed) {
+        if(Validator.validateString(vehicleDTO.getBrand())) {
             foundVehicle.setBrand(vehicleDTO.getBrand());
-        if(Validator.validateString(vehicleDTO.getModel()))
-            foundVehicle.setModel(vehicleDTO.getModel());
-        if(Validator.validateString(vehicleDTO.getColor()))
+            updatePerformed = true;
+        }
+
+        return updatePerformed;
+    }
+
+    private boolean fillColor(VehicleDTO vehicleDTO, Vehicle foundVehicle, boolean updatePerformed) {
+        if(Validator.validateString(vehicleDTO.getColor())) {
             foundVehicle.setColor(vehicleDTO.getColor());
+            updatePerformed = true;
+        }
+
+        return updatePerformed;
+    }
+
+    private boolean fillModel(VehicleDTO vehicleDTO, Vehicle foundVehicle, boolean updatePerformed) {
+        if(Validator.validateString(vehicleDTO.getModel())) {
+            foundVehicle.setModel(vehicleDTO.getModel());
+            updatePerformed = true;
+        }
+
+        return updatePerformed;
     }
 
     public void deleteVehicle(Integer vehicleId) {
